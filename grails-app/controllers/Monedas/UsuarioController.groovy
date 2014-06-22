@@ -15,7 +15,23 @@ class UsuarioController {
         params.max = Math.min(max ?: 10, 100)
         respond Usuario.list(params), model:[usuarioInstanceCount: Usuario.count()]
     }
-
+    //De la vista llamo a esta accion, que verifica el logueo
+    def login ={
+        def UsuarioActivo = User.findWhere (nombre:params['nombre'],
+        password:parms['password'])
+        session.user= UsuarioActivo // Obtengo la session del usuario registrado o no !!
+        
+        //Compruebo la busqueda por usuario y contraseña
+        if(user) // Si tengo session
+        {
+           // lo direcciono a la pagina de monedas
+           flash.message="Bienvenido al sistema "
+        } else
+        {
+            redirect (action:'index') // vuelvo al default
+        }
+    }
+    
     def show(Usuario usuarioInstance) {
         respond usuarioInstance
     }
